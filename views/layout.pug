@@ -1,7 +1,20 @@
 doctype html
 html
   head
-    title= Art Shop
+    title Art Shop
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
+    block nav 
+        nav
+            ul 
+                li#home-link
+                    a(href='/inventory/') Home
+                li 
+                    a(href='/inventory/pieces/') Art Pieces
+                li 
+                    a(href='/inventory/painters/') Painters
+                li 
+                    a(href='/inventory/categories/') Categories
     block content
+    footer 
+        p © Art Shop 2022

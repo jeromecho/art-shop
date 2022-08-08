@@ -14,6 +14,16 @@ require('dotenv').config();
 
 mongoose.connect(process.env.MONGODB_URI);
 
+const db = mongoose.connection; 
+
+db.once('open', () => {
+    console.log(`Database connected: ${process.env.MONGODB_URI}`);
+});
+
+db.once('error', err => {
+    console.log(`Cnnection error: ${err}`);
+});
+
 /**
  * Get port from environment and store in Express.
  */

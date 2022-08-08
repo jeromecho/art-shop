@@ -3,11 +3,16 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var inventoryRouter = require('./routes/inventoryrouter.js');
+var indexRouter = require('./routes/indexrouter');
 
 var app = express();
+var mongoose = require('mongoose');
+require('dotenv').config();
+
+// Nodemon neets mongoose.connect in APP.JS to work! 
+// TODO - call with nodemon bin/www, not /bin/www
+mongoose.connect(process.env.MONGODB_URI);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -20,7 +25,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+
+app.use('/inventory', inventoryRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
