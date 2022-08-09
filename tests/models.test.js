@@ -1,15 +1,17 @@
 require('dotenv').config();
-const ArtPiece = require('../models/artpiece');
+const path = require('path');
+const ArtPiece = require(path.join(__dirname, '../models/artpiece'));
 const ArtPieceInstance = require('../models/artpieceinstance');
 const Category = require('../models/category');
 const Painter = require('../models/painter');
 const mongoose = require('mongoose');
 const MONGODB_URI = process.env.MONGODB_URI;
+const fs = require('fs');
 
 jest.useFakeTimers();
 
 beforeAll(async() => {
-    await mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
+    // await mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
 });
 
 it('saves art piece model', async () => {
@@ -32,25 +34,33 @@ it('saves art piece model', async () => {
         dateOfBirth: new Date(),
         dateOfDeath: new Date(),
     });
-    const exampleArtPiece = new ArtPiece({
-        name: 'Example',
-        description: 'World&apos;s most famous painting.',
-        categories: [ exampleCategory._id ],
-        instances: [ exampleInstance._id ],
-        painter: examplePainter._id,
-    });
 
-    await exampleArtPiece.save((err) => {
+    return fs.readFile(path.join(__dirname, '../img/gogh_1.jpeg'), (err, imgData) => {
         if (err) { 
             errors = err;
-            return;
         }
-        isSuccessful = true;
+
+        const exampleArtPiece = new ArtPiece({
+            name: 'Example',
+            description: 'World&apos;s most famous painting.',
+            categories: [ exampleCategory._id ],
+            image: imgData, 
+            instances: [ exampleInstance._id ],
+            painter: examplePainter._id,
+        });
+
+        return exampleArtPiece.save((err) => {
+            if (err) { 
+                errors = err;
+                return;
+            }
+            isSuccessful = true;
+
+            expect(errors).toBe(null);
+            expect(isSuccessful).toBe(true);
+            expect(1).toBe(2);
+            // TODO jest test not reaching here!
+        });
     });
-
-    expect(exampleArtPiece.save).toBe(false)
-
-    expect(errors).toBe(null);
-    expect(isSuccessful).toBe(true);
 });
 

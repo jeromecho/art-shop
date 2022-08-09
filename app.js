@@ -6,12 +6,17 @@ var logger = require('morgan');
 var inventoryRouter = require('./routes/inventoryrouter.js');
 var indexRouter = require('./routes/indexrouter');
 
+require('./models/artpiece');
+require('./models/artpieceinstance');
+require('./models/category');
+require('./models/painter');
+
 var app = express();
 var mongoose = require('mongoose');
+
 require('dotenv').config();
 
 // Nodemon neets mongoose.connect in APP.JS to work! 
-// TODO - call with nodemon bin/www, not /bin/www
 mongoose.connect(process.env.MONGODB_URI);
 
 // view engine setup

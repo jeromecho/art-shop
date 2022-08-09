@@ -1,0 +1,21 @@
+extends layout 
+
+block content
+    main 
+        div.header
+            h1= title 
+            p The finest painters of human history.
+            hr 
+        div.items-display
+            if painters
+                each painter in painters 
+                    a.item(
+                        style=`background-image: url(${painter.img})`
+                        href=painter.url
+                    )
+                        h2= painter.name 
+                        p.hidden= (painter.description.split('').length > 74) ? painter.description.slice(0,74) + '..' : painter.description
+            else
+                p There are no painters to display right now.
+            
+

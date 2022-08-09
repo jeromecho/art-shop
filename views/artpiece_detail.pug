@@ -1,0 +1,32 @@
+extends layout 
+
+block content
+    main 
+        div.header
+            h1= piece.name
+            p by #[a(href= piece.painter.url) #{piece.painter.name}]
+            hr 
+        div.detail-container
+            div.left
+                img.main-img(src=piece.image)
+            div.right
+                h2 About 
+                p= piece.description
+                h3 Categories
+                ul 
+                    each category in piece.categories 
+                        li
+                            a(href=category.url) #{category.name}
+                h3 Copies 
+                ul 
+                    each instance in piece.instances
+                        li 
+                            a(href=instance.url) #{instance._id}
+                
+
+
+
+
+
+            
+

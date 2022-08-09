@@ -8,16 +8,14 @@ const painter_controller = require('../controllers/painterController');
 
 router.get('/', artpiece_controller.index);
 router.get('/pieces', artpiece_controller.pieces_list);
-router.get('/piece/:id', artpiece_controller.piece_detail);
-router.get('/piece/:id/update', artpiece_controller.update_piece_get);
-router.post('/piece/:id/update', artpiece_controller.update_piece_post);
-router.get('/piece/:id/delete', artpiece_controller.delete_piece_get);
-router.post('/piece/:id/delete', artpiece_controller.delete_piece_post);
-router.get('/piece/:id/create', artpiece_controller.create_piece_get);
-router.post('/piece/:id/create', artpiece_controller.create_piece_post);
+router.get('/pieces/:id', artpiece_controller.piece_detail);
+router.get('/pieces/:id/update', artpiece_controller.update_piece_get);
+router.post('/pieces/:id/update', artpiece_controller.update_piece_post);
+router.get('/pieces/:id/delete', artpiece_controller.delete_piece_get);
+router.post('/pieces/:id/delete', artpiece_controller.delete_piece_post);
+router.get('/pieces/:id/create', artpiece_controller.create_piece_get);
+router.post('/pieces/:id/create', artpiece_controller.create_piece_post);
 
-router.get('/piece_instances', 
- artpiece_instance_controller.piece_instances_list);
 router.get('/piece_instance/:id', 
  artpiece_instance_controller.piece_instance_detail);
 router.get('/piece_instance/:id/update', 

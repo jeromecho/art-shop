@@ -1,0 +1,28 @@
+extends layout 
+
+block content
+    main 
+        div.header
+            h1= title 
+            p Fine categories for fine fine art 
+            hr 
+        div.items-display
+            if categories
+                - let n = 0; 
+                - const length = categories.length
+                - let category = categories[n]
+                - let img = imgs[n]
+                while n < length
+                    a.item(
+                        style=`background-image: url(${img})`
+                        href=category.url
+                    )
+                        h2= category.name 
+                        p.hidden= (category.description.split('').length > 74) ? category.description.slice(0,74) + '..' : category.description
+                    - n++
+                    - category = categories[n]
+                    - img = imgs[n]
+            else
+                p There are no categories to display right now.
+            
+

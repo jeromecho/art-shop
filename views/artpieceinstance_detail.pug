@@ -1,0 +1,21 @@
+extends layout 
+
+block content
+    main 
+        div.header
+            h1 #{artpiece.name} - #{instance._id}
+            p #{instance.status}
+            hr
+        div.detail-container
+            div.left
+                img.main-img(src=artpiece.img)
+            div.right
+                h2 Date Made
+                p #{instance.dateMade}
+                h3 Authenticity 
+                p #{instance.genuine}
+                h3 Price
+                p #{instance.price}
+                h3 Product Number 
+                p #{instance.productNumber}
+                

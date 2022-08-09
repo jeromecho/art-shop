@@ -1,0 +1,21 @@
+extends layout 
+
+block content
+    main 
+        div.header
+            h1= title 
+            p The finest artworks - by the finest fine artists. 
+            hr 
+        div.items-display
+            if artpieces
+                each artpiece in artpieces 
+                    a.item(
+                        style=`background-image: url(${artpiece.image})`
+                        href=artpiece.url
+                    )
+                        h2= artpiece.name 
+                        p.hidden= (artpiece.description.split('').length > 74) ? artpiece.description.slice(0,74) + '..' : artpiece.description
+            else
+                p There are no art pieces to display right now.
+            
+
