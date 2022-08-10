@@ -49,7 +49,7 @@ exports.create_painter_get = (req, res) => {
     res.render('painter_form', {});
 };
 
-exports.create_painter_post = [
+exports.create_painter_post = (req, res) => { 
     body('name', 'Name is required').trim().isLength({ min: 1 }).escape(), 
     body('description', 'Description is required').trim().isLength({ min: 1 }).escape(), 
     body('dateOfBirth', 'Date of Birth is required')
@@ -92,6 +92,5 @@ exports.create_painter_post = [
                 res.redirect(painter.url);
             });
         }
-    }
-];
+    }};
 

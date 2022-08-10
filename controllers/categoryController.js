@@ -4,6 +4,7 @@ const async = require('async');
 const fetch = require('node-fetch');
 const { createApi } = require('unsplash-js');
 const { categoryBgImgs } = require('../assets/images.js');
+const { body, validationResult } = require('express-validator');
 require('dotenv').config();
 
 const unsplash = createApi({
@@ -52,15 +53,24 @@ exports.category_detail = (req, res) => {
             Category.findById(req.params.id).exec(callback);
         }, 
         category_paintings(callback) {
-            ArtPiece.find({ category: req.params.id }).exec(callback);
+            ArtPiece.find({ categories: req.params.id }).exec(callback);
         }
     }, (err, results) => {
         if (err) { return next(err) }
-        res.render('category_detail', {
-            category: results.category,
-            paintings: results.category_paintings, 
-            // TODO - integrate w unsplash
-            img: images[0], 
+        Promise.resolve(getRandomUnsplashPhoto())
+        .then(imgURL => {
+            res.render('category_detail', {
+                category: results.category,
+                paintings: results.category_paintings, 
+                img: imgURL,
+            })
+        })
+        .catch(err => {
+            res.render('category_detail', {
+                category: results.category,
+                paintings: results.category_paintings, 
+                img: categoryBgImgs[0], 
+            });
         });
     });
 };
@@ -82,10 +92,31 @@ exports.delete_category_post = (req, res) => {
 };
 
 exports.create_category_get = (req, res) => { 
-	res.send('Not yet implemented');
+    res.render('category_form', {});
 };
 
-exports.create_category_post = (req, res) => { 
-	res.send('Not yet implemented');
-};
+exports.create_category_post = [
+    body('name', 'Name is required').trim().isLength({ min: 1 }).escape(), 
+    body('description', 'Description is required').trim().isLength({ min: 1 }).escape(), 
+    (req, res, next) => { 
+        const errors = validationResult(req);
+
+        const category = new Category({
+            name: req.body.name,
+            description: req.body.description,
+        });
+
+
+        if (!errors.isEmpty()) { 
+            res.render('category_form', {
+                category: category, 
+            });
+        } else {
+            category.save(err => {
+                if (err) { return next(err) }
+                res.redirect(category.url);
+            });
+        }
+    }
+];
 

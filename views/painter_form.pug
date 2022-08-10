@@ -1,0 +1,62 @@
+extends layout 
+
+block content
+    main 
+        div.header
+            h1 Create Painter
+            p Allow us to extend an invitation to the geniuses and hardworkers on this world
+            hr
+        form.create-form(action='' method='POST')
+            div.form-group
+                label(for='name') Name
+                input#name(
+                name='name'
+                type='text'
+                placeholder='Vincent Van Gogh'
+                required='true'
+                value=(painter ? painter.name : '') 
+                )
+            div.form-group
+                label(for='description') Description
+                textarea#description(
+                name='description'
+                type='text'
+                placeholder='A loner but hardworker, he...'
+                required='true'
+                ) #{painter ? painter.description : '' }
+            div.form-group
+                label(for='date-of-birth') Date of Birth
+                input#date-of-birth(
+                name='dateOfBirth'
+                type='date'
+                placeholder='YYYY-MM-DD'
+                required='true'
+                value= painter ? painter.dateOfBirth : ''
+                ) 
+            div.form-group
+                label(for='date-of-death') Date of Death
+                input#date-of-death(
+                name='dateOfDeath'
+                type='date'
+                placeholder='YYYY-MM-DD'
+                required='true'
+                value= painter ? painter.dateOfDeath : ''
+                ) 
+            div.form-group
+                label(for='img') Image URL
+                input#img(
+                name='img'
+                type='text'
+                placeholder=`https://assets.vangoghmuseum.nl/f9a7a187-484e-4821-b84a-79c836109029?w=1280&h=720&c=12f8ae08a908d9261f58a6bb1bfaa67e8daf061b56752678819c8c241a881bbe`
+                required='true'
+                value= painter ? painter.img : ''
+                )
+            button.main-button(type='submit') Submit
+        if errors
+            ul.errors
+                each error in errors
+                    li= error.msg
+        
+
+
+

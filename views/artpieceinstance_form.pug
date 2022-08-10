@@ -1,0 +1,79 @@
+extends layout 
+
+block content
+    main 
+        div.header
+            h1 Create Art Piece Instance (Copy)
+            p Sell genuine and replica pieces on Brooklyn's largest marketplace
+            hr
+        form.create-form(action='' method='POST')
+            div.form-group
+                label(for='dateMade') Date Made
+                input#dateMade(
+                name='dateMade'
+                type='date'
+                placeholder='YYYY-MM-DD'
+                required='true'
+                value=(instance ? instance.dateMade.toISOString().split('T')[0] : '') 
+                )
+            div.form-group
+                label(for='status') Status
+                select#status(name='status', type='select', placeholder='Select status', required='true')
+                        option(
+                            value='Available'
+                            selected=(instance ? (instance.status.toString() === 'Available' ? 'true': '') : '')
+                        ) Available
+                        option(
+                            value='Sold'
+                            selected=(instance ? (instance.status.toString() === 'Sold' ? 'true': '') : '')
+                        ) Sold 
+                        option(
+                            value='On the way'
+                            selected=(instance ? (instance.status.toString() === 'On the way' ? 'true': '') : '')
+                        ) On the way
+            div.form-group
+                label(for='genuine') Genuine
+                select#genuine(name='genuine', type='select', placeholder='Select authenticity', required='true')
+                        option(
+                            value='Genuine'
+                            selected=(instance ? (instance.genuine.toString() === 'Genuine' ? 'true': '') : '')
+                        ) Genuine 
+                        option(
+                            value='Replica'
+                            selected=(instance ? (instance.genuine.toString() === 'Replica' ? 'true': '') : '')
+                        ) Replica
+            div.form-group
+                label(for='price') Price
+                input(
+                type='number'
+                name='price'
+                value=(instance ? instance.price : '')
+                required='true'
+                placeholder='17000'
+                )
+            div.form-group
+                label(for='productNumber') Product Number
+                input(
+                type='text'
+                name='productNumber'
+                value=(instance ? instance.productNumber : '')
+                required='true'
+                placeholder='LLL9JH98'
+                )
+            div.form-group
+                label(for='artpieceID' hidden='true') Art Piece ID
+                input(
+                type='hidden'
+                name='artpieceID'
+                value=artpieceID
+                required='true'
+                )
+            button.main-button(type='submit') Submit
+        if errors
+            ul.errors
+                each error in errors
+                    li= error.msg
+        
+
+
+

@@ -22,6 +22,10 @@ block content
                     each instance in piece.instances
                         li 
                             a(href=instance.url) #{instance._id}
+                form(action='/inventory/piece_instance/create' method='GET')
+                    input(type='hidden' name='piece' value=piece._id)
+                    button.fake-link(type='submit') Create new instance (copy)
+
                 
 
 
