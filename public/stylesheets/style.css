@@ -2,6 +2,7 @@
     --main-button-bg: #6495ED;
     --main-button-border: #FFA500;
     --main-input-border: #989898;
+    --nav-bg: #fff0db;
 }
 
 body {
@@ -14,7 +15,7 @@ a {
 }
 
 .main-image { 
-    height: 30rem;
+    height: min(25rem, 60vw);
 }
 
 .hidden {
@@ -29,8 +30,26 @@ html, body {
 }
 
 nav {
+    background-color: var(--nav-bg);
     height: 15%;
     width: 100%;
+}
+
+nav > ul {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 0; 
+    width: 100%;
+}
+
+nav > ul > li {
+    color: var(--main-button-bg);
+    margin-left: min(1vw, 3rem);
+    margin-right: min(1vw, 3rem);
 }
 
 main {
@@ -42,6 +61,11 @@ main {
     width: 100%;
 }
 
+.main-img {
+    max-height: 25rem;
+    height: 40vw;
+}
+
 .header {
     width: 100%;
 }
@@ -50,6 +74,18 @@ main {
     position: relative;
     left: 3rem;
     max-width: 60%;
+}
+
+.available {
+    color: #228B22;
+}
+
+.sold {
+    color: #FF5733;
+}
+
+.on-the-way { 
+    color: #FFC300;
 }
 
 .header > hr {
@@ -140,6 +176,13 @@ main {
     width: 100%;
 }
 
+.detail-container > .right > a {
+    bottom: 1rem;
+    color: var(--main-button-bg);
+    left: 0.35rem;
+    position: relative;
+}
+
 .fake-link {
     border: none;
     color: var(--main-button-bg);
@@ -150,11 +193,6 @@ main {
     text-decoration: underline;
     top: 1rem;
     width: fit-content;
-}
-
-.main-img {
-    max-height: 25rem;
-    height: 40vw;
 }
 
 form { 
@@ -239,6 +277,10 @@ form {
 
 .main-button:hover { 
     opacity: 1; 
+}
+
+.spacer {
+    height: 1rem;
 }
 
 footer {

@@ -5,6 +5,7 @@ const fetch = require('node-fetch');
 const { createApi } = require('unsplash-js');
 const { categoryBgImgs } = require('../assets/images.js');
 const { body, validationResult } = require('express-validator');
+const htmlDecode = require('../helpers/helpers');
 require('dotenv').config();
 
 const unsplash = createApi({
@@ -20,9 +21,7 @@ async function getRandomUnsplashPhoto() {
             const photo = result.response; 
             return photo.urls.full;
         }
-    })/*.catch(err => {
-        console.log('Error: ', err);
-    }); */
+    });
 }
 
 exports.categories_list = (req, res, next) => { 
@@ -34,7 +33,7 @@ exports.categories_list = (req, res, next) => {
             const arr = categories.map(category => getRandomUnsplashPhoto());
             Promise.all(arr)
             .then(images =>  callback(null, { categories, images }))
-            // IF API is down, use images files
+            // IF API is down, use static images files
             .catch (err => callback(null, { category, categoryBgImgs}));
         }
     ], (err, results) => {
@@ -63,6 +62,7 @@ exports.category_detail = (req, res) => {
                 category: results.category,
                 paintings: results.category_paintings, 
                 img: imgURL,
+                htmlDecode: htmlDecode,
             })
         })
         .catch(err => {
@@ -70,25 +70,75 @@ exports.category_detail = (req, res) => {
                 category: results.category,
                 paintings: results.category_paintings, 
                 img: categoryBgImgs[0], 
+                htmlDecode: htmlDecode,
             });
         });
     });
 };
 
 exports.update_category_get = (req, res) => { 
-	res.send('Not yet implemented');
+    Category.findById(req.params.id).exec(
+        (err, category) => {
+            if (err) { return next(err) } 
+            res.render('category_form', {
+                category: category,
+            });
+        }
+    );
 };
 
-exports.update_category_post = (req, res) => { 
-	res.send('Not yet implemented');
-};
+exports.update_category_post = [
+    body('name', 'Name is required').trim().isLength({ min: 1 }).escape(), 
+    body('description', 'Description is required').trim().isLength({ min: 1 }).escape(), 
+    (req, res, next) => { 
+        const errors = validationResult(req);
+
+        const category = new Category({
+            name: req.body.name,
+            description: req.body.description,
+            _id: req.params.id,
+        });
+
+        if (!errors.isEmpty()) { 
+            res.render('category_form', {
+                category: category, 
+            });
+        } else {
+            Category.findByIdAndUpdate(
+                req.params.id, 
+                category, 
+                {},
+                (err, updated_category) => {
+                    if (err) { return next(err) }
+                    res.redirect(updated_category.url);
+            });
+        }
+    }
+];
 
 exports.delete_category_get = (req, res) => { 
-	res.send('Not yet implemented');
+    async.parallel({
+        category(callback) {
+            Category.findById(req.params.id).exec(callback);
+        }, 
+        category_pieces(callback) {
+            ArtPiece.find({ categories: { "$in": [req.params.id] }}).exec(callback);
+        }
+    }, (err, results) => {
+        if (err) { return next(err) }
+
+        res.render('category_delete', {
+            category: results.category,
+            pieces: results.category_pieces
+        });
+    });
 };
 
 exports.delete_category_post = (req, res) => { 
-	res.send('Not yet implemented');
+    Category.findByIdAndDelete(req.params.id, {}, err => {
+        if (err) { return next(err) }
+        res.redirect('/inventory/categories');
+    });
 };
 
 exports.create_category_get = (req, res) => { 

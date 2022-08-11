@@ -1,0 +1,22 @@
+extends layout 
+
+block content
+    main 
+        div.header
+            h1 Delete Instance
+            p #{piece.name} 
+            hr  
+        div.delete-container 
+            if instances.length
+                h2 Please delete the following art piece instances before deleting this art piece
+                ul
+                each instance in instances 
+                    li 
+                        a(href=instance.url) #{instance.name}
+            else
+                h2 Are you sure you want to delete this piece? This action cannot be undone. 
+                form(action='' method='POST') 
+                    button.main-button(type='submit') Delete piece
+        
+
+ 

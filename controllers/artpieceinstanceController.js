@@ -11,42 +11,97 @@ exports.piece_instance_detail = (req, res, next) => {
             ArtPieceInstance.findById(req.params.id).exec(callback);
         }, 
         instance_artpiece(callback) {
-            ArtPiece.findOne({name: 'The Potato Eaters'}).exec(callback);
-            return;
-            ArtPiece.find({ instances: { "$in" : [req.params.id]}}).exec(callback);
+            ArtPiece.findOne({ instances: { "$in" : [req.params.id]}}).exec(callback);
         }
     }, (err, results) => {
         if (err) { return next(err) }
         // TODO - debug
-        console.log(results.instance_artpiece);
         res.render('artpieceinstance_detail', {
             artpiece: results.instance_artpiece,
-            instance: {
-                dateMade: results.instance.date_made_formatted,
-                genuine: results.instance.genuine,
-                status: results.instance.status,
-                price: results.instance.price,
-                productNumber: results.instance.productNumber,
-                _id: results.instance._id,
-            },
+            instance: results.instance,
         });
     });
 };
 
-exports.update_piece_instance_get = (req, res) => { 
-	res.send('Not yet implemented');
+exports.update_piece_instance_get = (req, res, next) => { 
+            ArtPieceInstance.findById(req.params.id).exec((err, instance) => {
+            if (err) { return next(err) } 
+            res.render('artpieceinstance_form', {
+                instance: instance, 
+                artpieceID: 'dummy',
+            });
+    });
 };
 
-exports.update_piece_instance_post = (req, res) => { 
-	res.send('Not yet implemented');
+exports.update_piece_instance_post = [
+    body('dateMade', 'Date made is required').trim().isISO8601().toDate(), 
+    body('status', 'Status is required').escape(), 
+    body('genuine', 'Genuine is required').escape(), 
+    body('price', 'Price is required').trim().isLength({ min: 1 }).escape(), 
+    body('productNumber', 'Product number must be an 8 character string')
+    .trim()
+    .isLength(8)
+    .escape(),
+    body('artpieceID', 'Art piece ID must exist').trim().isLength({ min: 1}),
+    (req, res, next) => { 
+        const errors = validationResult(req);
+
+        const updated_instance = new ArtPieceInstance({
+            dateMade: req.body.dateMade,
+            status: req.body.status,
+            genuine: req.body.genuine,
+            price: req.body.price,
+            productNumber: req.body.productNumber,
+            _id: req.params.id,
+        });
+
+        if (!errors.isEmpty()) { 
+            res.render('artpieceinstance_form', { 
+                instance: updated_instance, 
+                artpieceID: req.body.artpieceID,
+                errors: errors.array(),
+            })
+        } else {  
+            ArtPieceInstance.findByIdAndUpdate(
+                req.params.id, 
+                updated_instance, 
+                {}, 
+                (err, updatedInstance) => {
+                    if (err) { return next(err) }
+                    res.redirect(updatedInstance.url);
+                }
+            );
+    }
+    }
+];
+
+exports.delete_piece_instance_get = (req, res, next) => { 
+    ArtPiece.findOne({ instances: { "$in": [req.params.id] }}).exec(
+    (err, piece) => {
+        if (err) { return next(err) }
+
+        res.render('artpieceinstance_delete', {
+            piece: piece,
+            instance_id: req.params.id,
+        });
+    });
 };
 
-exports.delete_piece_instance_get = (req, res) => { 
-	res.send('Not yet implemented');
-};
-
-exports.delete_piece_instance_post = (req, res) => { 
-	res.send('Not yet implemented');
+exports.delete_piece_instance_post = (req, res, next) => { 
+    async.parallel({
+        deleteInstance(callback) {
+            ArtPieceInstance.findByIdAndDelete(req.params.id, {}, callback);
+        },  
+        updatePiece(callback) { 
+            ArtPiece.findOneAndUpdate({ instances: { "$in": [req.params.id] }}, {
+                "$pull": { 
+                    instances: req.params.id,
+                },
+            }).exec(callback);
+        }},  (err, results) => {
+            if (err) { return next(err) }
+            res.redirect('/inventory/pieces');
+        })
 };
 
 exports.create_piece_instance_get = (req, res) => { 

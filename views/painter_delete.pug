@@ -1,0 +1,22 @@
+extends layout 
+
+block content
+    main 
+        div.header
+            h1 Delete Painter
+            p #{painter.name} 
+            hr  
+        div.delete-container 
+            if pieces.length
+                h2 Please delete the following art piece pieces before deleting this art piece
+                ul
+                each piece in pieces 
+                    li  
+                        a(href=piece.url) #{piece.name}
+            else
+                h2 Are you sure you want to delete this painter? This action cannot be undone. 
+                form(action='' method='POST') 
+                    button.main-button(type='submit') Delete painter 
+        
+
+ 

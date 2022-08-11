@@ -11,10 +11,15 @@ block content
                 img.main-img(src=painter.img)
             div.right
                 h2 About
-                p= painter.description
+                p= htmlDecode(painter.description)
                 h3 Works
                 ul 
                     each painting in paintings
                         li
-                            a(href=painting.url) #{painting.name}
+                            a(href='/inventory/painter/'+painter._id) #{painting.name}
+                div.spacer
+                a(href='/inventory/painter/'+ painter._id + '/update') Update painter
+                div.spacer
+                a(href='/inventory/painter/'+ painter._id + '/delete') Delete painter
+
                 

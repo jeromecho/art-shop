@@ -3,7 +3,7 @@ extends layout
 block content
     main 
         div.header
-            h1 Create Painter
+            h1 #{title}
             p Allow us to extend an invitation to the geniuses and hardworkers on this world
             hr
         form.create-form(action='' method='POST')
@@ -31,7 +31,7 @@ block content
                 type='date'
                 placeholder='YYYY-MM-DD'
                 required='true'
-                value= painter ? painter.dateOfBirth : ''
+                value= painter ? painter.dateOfBirth.toISOString().split('T')[0] : ''
                 ) 
             div.form-group
                 label(for='date-of-death') Date of Death
@@ -40,7 +40,7 @@ block content
                 type='date'
                 placeholder='YYYY-MM-DD'
                 required='true'
-                value= painter ? painter.dateOfDeath : ''
+                value= painter ? painter.dateOfDeath.toISOString().split('T')[0] : ''
                 ) 
             div.form-group
                 label(for='img') Image URL

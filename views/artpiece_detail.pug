@@ -11,7 +11,7 @@ block content
                 img.main-img(src=piece.image)
             div.right
                 h2 About 
-                p= piece.description
+                p= htmlDecode(piece.description) 
                 h3 Categories
                 ul 
                     each category in piece.categories 
@@ -25,6 +25,9 @@ block content
                 form(action='/inventory/piece_instance/create' method='GET')
                     input(type='hidden' name='piece' value=piece._id)
                     button.fake-link(type='submit') Create new instance (copy)
+                a(href=piece.url+'/update') Update piece
+                div.spacer
+                a(href=piece.url+'/delete') Delete piece
 
                 
 

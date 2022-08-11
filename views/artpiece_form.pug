@@ -35,12 +35,12 @@ block content
                 )
             div.form-group
                 label(for='painter') Painter
-                if painters 
+                if painters.length 
                     select#painter(name='painter', type='select', placeholder='Select painter', required='true')
                         each painter in painters
                             option(
                                 value=painter._id
-                                selected=(piece.painter ? (piece.painter.toString() === painter._id ? 'true': '') : '')
+                                selected=(piece ? (piece.painter ? (piece.painter.toString() === painter._id ? 'true': '') : ''): '')
                             ) #{painter.name} 
                     a(href='/inventory/painter/create') Create a new painter
                 else 
@@ -48,7 +48,7 @@ block content
                     a(href='/inventory/painter/create') Create a new painter
             div.form-group
                 label Categories
-                if categories 
+                if categories.length
                     div.checkboxes
                         each category in categories 
                             div.checkbox
@@ -63,6 +63,9 @@ block content
                 else 
                     p There are no categories in the database right now. Create some to create your art piece.
                     a(href='/inventory/category/create') Create a new category
+            div.form-group
+                label(hidden='true') Instances
+                input(type='hidden' name='id' value=piece ? piece.instances : '')
             button.main-button(type='submit') Submit
         if errors
             ul.errors
