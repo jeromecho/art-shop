@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const artpiece_controller = require('../controllers/artpieceController');
-const artpiece_instance_controller = require('../controllers/artpieceInstanceController');
+const artpiece_instance_controller = require('../controllers/artpieceinstanceController');
 const category_controller = require('../controllers/categoryController');
 const painter_controller = require('../controllers/painterController');
 
