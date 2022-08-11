@@ -6,7 +6,8 @@
     "start": "node ./bin/www"
   },
   "engines": {
-      "node": "17.6.0"
+      "node": "17.6.0", 
+      "npm": "8.5.1"
   },
   "jest": {
     "testEnvironment": "node"
