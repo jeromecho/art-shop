@@ -16,6 +16,11 @@ https://gentle-sands-51125.herokuapp.com/inventory/
 
 ## Images 
 
+<img width="505" alt="image" src="https://user-images.githubusercontent.com/71617542/184046252-e753697d-4108-4ad8-979a-13036f1ec4ee.png">
+<img width="1000" alt="image" src="https://user-images.githubusercontent.com/71617542/184046322-d6a6273d-ed18-4705-89a9-c43ba32dd497.png">
+<img width="1000" alt="image" src="https://user-images.githubusercontent.com/71617542/184046341-1936d67a-1f9d-4560-81e5-a7031f0e8ca5.png">
+
+
 ## Technical Challenges
 
 Problem: 
